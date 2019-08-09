@@ -19,7 +19,7 @@ set -e # exit on error
 has_fisher=true
 
 if [ $stage -le 0 ]; then
-  local/swbd1_data_download.sh /export/corpora3/LDC/LDC97S62
+  local/swbd1_data_download.sh /disks/data1/corpora/LDC97S62
   # local/swbd1_data_download.sh /mnt/matylda2/data/SWITCHBOARD_1R2 # BUT,
 fi
 
@@ -39,7 +39,8 @@ if [ $stage -le 2 ]; then
   # Note: if you are using this link, make sure you rename conv_tab.csv to conv.tab
   # after downloading.
   # Usage: local/swbd1_data_prep.sh /path/to/SWBD [/path/to/SWBD_docs]
-  local/swbd1_data_prep.sh /export/corpora3/LDC/LDC97S62
+  #local/swbd1_data_prep.sh /export/corpora3/LDC/LDC97S62
+  local/swbd1_data_prep.sh /disks/data1/corpora/LDC97S62
   # local/swbd1_data_prep.sh /home/dpovey/data/LDC97S62
   # local/swbd1_data_prep.sh /data/corpora0/LDC97S62
   # local/swbd1_data_prep.sh /mnt/matylda2/data/SWITCHBOARD_1R2 # BUT,
@@ -55,7 +56,7 @@ if [ $stage -le 3 ]; then
   # only part 1 transcripts ~700hr are used)
 
   # If you have the Fisher data, you can set this "fisher_dir" variable.
-  fisher_dirs="/export/corpora3/LDC/LDC2004T19/fe_03_p1_tran/ /export/corpora3/LDC/LDC2005T19/fe_03_p2_tran/"
+  fisher_dirs="/disks/data1/corpora/LDC2B004T19/fe_03_p1_tran/ /disks/data1/corpora/LDC2005T19/fe_03_p2_tran/"
   # fisher_dirs="/exports/work/inf_hcrc_cstr_general/corpora/fisher/transcripts" # Edinburgh,
   # fisher_dirs="/mnt/matylda2/data/FISHER/fe_03_p1_tran /mnt/matylda2/data/FISHER/fe_03_p2_tran" # BUT,
   local/swbd1_train_lms.sh data/local/train/text \
@@ -73,7 +74,7 @@ if [ $stage -le 4 ]; then
   LM=data/local/lm/sw1_fsh.o4g.kn.gz
   [ -f $LM ] || has_fisher=false
   if $has_fisher; then
-    utils/build_const_arpa_lm.sh $LM data/lang_nosp data/lang_nosp_sw1_fsh_fg
+    utils/build_const_arpa_lm.sh $LM data/lBang_nosp data/lang_nosp_sw1_fsh_fg
   fi
 fi
 
@@ -86,8 +87,10 @@ if [ $stage -le 5 ]; then
   # local/eval2000_data_prep.sh /data/corpora0/LDC2002S09/hub5e_00 /data/corpora0/LDC2002T43
   # local/eval2000_data_prep.sh /mnt/matylda2/data/HUB5_2000/ /mnt/matylda2/data/HUB5_2000/2000_hub5_eng_eval_tr
   # local/eval2000_data_prep.sh /exports/work/inf_hcrc_cstr_general/corpora/switchboard/hub5/2000 /exports/work/inf_hcrc_cstr_general/corpora/switchboard/hub5/2000/transcr
-  local/eval2000_data_prep.sh /export/corpora2/LDC/LDC2002S09/hub5e_00 /export/corpora2/LDC/LDC2002T43
+  local/eval2000_data_prep.sh /disks/data1/corpora/LDC2002S09/hub5e_00 /disks/data1/corpora/LDC2002T43
 fi
+
+exit;
 
 if [ $stage -le 6 ]; then
   # prepare the rt03 data.  Note: this isn't 100% necessary for this

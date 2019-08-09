@@ -7,7 +7,7 @@
 #
 
 # Begin configuration section.
-nj=96
+nj=35
 decode_nj=20
 stage=0
 nnet_stage=-10
@@ -28,7 +28,7 @@ set -e # exit on error
 
 # chime5 main directory path
 # please change the path accordingly
-chime5_corpus=/export/corpora4/CHiME5
+chime5_corpus=/disks/data1/corpora/CHiME5
 json_dir=${chime5_corpus}/transcriptions
 audio_dir=${chime5_corpus}/audio
 
@@ -82,7 +82,7 @@ if [ $stage -le 4 ]; then
   dereverb_dir=${PWD}/wav/wpe/
   for dset in dev eval; do
     for mictype in u01 u02 u03 u04 u06; do
-      local/run_wpe.sh --nj 4 --cmd "$train_cmd --mem 120G" \
+      local/run_wpe.sh --nj 1 --cmd "$train_cmd --mem 120G" \
 			      ${audio_dir}/${dset} \
 			      ${dereverb_dir}/${dset} \
 			      ${mictype}

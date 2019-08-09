@@ -7,7 +7,7 @@
 #
 
 # Begin configuration section.
-nj=96
+nj=35
 decode_nj=20
 stage=0
 enhancement=beamformit # for a new enhancement method,
@@ -23,7 +23,7 @@ set -e # exit on error
 
 # chime5 main directory path
 # please change the path accordingly
-chime5_corpus=/export/corpora4/CHiME5
+chime5_corpus=/disks/data1/corpora/CHiME5
 json_dir=${chime5_corpus}/transcriptions
 audio_dir=${chime5_corpus}/audio
 
@@ -221,10 +221,15 @@ if [ $stage -le 17 ]; then
 fi
 
 if [ $stage -le 18 ]; then
+   # chain TDNN
+   local/chain/run_tdnn.sh --nj ${nj} --stage 13 --train-set ${train_set}_cleaned --test-sets "$test_sets" --gmm tri3_cleaned --nnet3-affix _${train_set}_cleaned
+fi
+
+if [ $stage -le 19 ]; then
   # final scoring to get the official challenge result
   # please specify both dev and eval set directories so that the search parameters
   # (insertion penalty and language model weight) will be tuned using the dev set
-  local/score_for_submit.sh \
+  local/score_for_submit.sh --do-eval true \
       --dev exp/chain_${train_set}_cleaned/tdnn1a_sp/decode_dev_${enhancement}_ref \
       --eval exp/chain_${train_set}_cleaned/tdnn1a_sp/decode_eval_${enhancement}_ref
 fi
