@@ -79,7 +79,7 @@ cat $dict_dir/lexicon-en/lexicon-en-oov.txt $dict_dir/lexicon-en/lexicon-en-iv.t
   sort > $dict_dir/lexicon-en/lexicon-en-phn.txt || exit 1;
 
 # convert cmu phoneme to pinyin phonenme
-mkdir $dict_dir/map
+mkdir -p $dict_dir/map
 cat conf/cmu2pinyin | awk '{print $1;}' | sort -u > $dict_dir/map/cmu || exit 1;
 cat conf/pinyin2cmu | awk -v cmu=$dict_dir/map/cmu \
   'BEGIN{while((getline<cmu)) dict[$1] = 1;}
@@ -177,7 +177,9 @@ wc -l $dict_dir/lexicon-ch/lexicon-ch-iv.txt
 # dictionary in order to get OOV pronunciations
 cat $dict_dir/cedict/ch-dict.txt |\
   perl -e '
-  use encoding utf8;
+  use utf8;
+  binmode(STDIN,":encoding(utf8)");
+  binmode(STDOUT,":encoding(utf8)");
   while (<STDIN>) {
     @A = split(" ", $_);
     $word_len = length($A[0]);
@@ -189,7 +191,9 @@ cat $dict_dir/cedict/ch-dict.txt |\
 # extract chars
 cat $dict_dir/cedict/ch-dict-1.txt | awk '{print $1}' |\
   perl -e '
-  use encoding utf8;
+  use utf8;
+  binmode(STDIN,":encoding(utf8)");
+  binmode(STDOUT,":encoding(utf8)");  
   while (<STDIN>) {
     @A = split(" ", $_);
     @chars = split("", $A[0]);
